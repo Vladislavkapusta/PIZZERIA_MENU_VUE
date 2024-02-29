@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script>
+<!-- <script>
 import axios from 'axios';
 import RecipeCard from './components/RecipeCard.vue';
 import PaginationBox from './components/PaginationBox.vue';
@@ -51,6 +51,42 @@ export default {
       this.currentPage = page;
     }
   }
+};
+</script> -->
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
+import RecipeCard from './components/RecipeCard.vue';
+import PaginationBox from './components/PaginationBox.vue';
+
+const recipes = ref([]);
+const currentPage = ref(1);
+const itemsPerPage = 6;
+
+const paginatedRecipes = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  return recipes.value.slice(startIndex, startIndex + itemsPerPage);
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(recipes.value.length / itemsPerPage);
+});
+
+onMounted(async () => {
+  await fetchRecipes();
+});
+
+const fetchRecipes = async () => {
+  try {
+    const response = await axios.get('https://dummyjson.com/recipes');
+    recipes.value = response.data.recipes;
+  } catch (error) {
+    console.error('Error fetching recipes:', error);
+  }
+};
+
+const onPageChanged = (page) => {
+  currentPage.value = page;
 };
 </script>
 

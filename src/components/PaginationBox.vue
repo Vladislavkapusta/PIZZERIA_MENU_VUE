@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script>
+<!-- <script>
 export default {
   props: {
     currentPage: Number,
@@ -20,6 +20,25 @@ export default {
       this.$emit('page-changed', this.currentPage + amount);
     }
   }
+};
+</script> -->
+
+<script setup>
+import { defineProps, defineEmits } from 'vue';
+
+const props = defineProps({
+  currentPage: Number,
+  totalPages: Number
+});
+
+const emit = defineEmits(['page-changed']);
+
+const GotoPage = (page) => {
+  emit('page-changed', page);
+};
+
+const changePage = (amount) => {
+  emit('page-changed', props.currentPage + amount);
 };
 </script>
 
